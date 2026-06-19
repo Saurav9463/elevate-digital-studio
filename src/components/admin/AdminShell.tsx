@@ -15,7 +15,7 @@ import { Logo } from "@/components/site/Logo";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 
-const nav = [
+const nav: Array<{ to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean }> = [
   { to: "/admin", label: "Overview", icon: LayoutDashboard, exact: true },
   { to: "/admin/leads", label: "Leads", icon: Inbox },
   { to: "/admin/projects", label: "Projects", icon: Briefcase },
@@ -23,7 +23,7 @@ const nav = [
   { to: "/admin/testimonials", label: "Testimonials", icon: Quote },
   { to: "/admin/founders", label: "Founders", icon: Users },
   { to: "/admin/settings", label: "Site settings", icon: Settings },
-] as const;
+];
 
 export function AdminShell({ children }: { children?: ReactNode }) {
   const { user, signOut } = useAuth();
