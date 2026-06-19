@@ -84,7 +84,10 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-border pt-6 text-xs text-muted-foreground md:flex-row md:items-center">
           <p>© {new Date().getFullYear()} {siteConfig.name}. All rights reserved.</p>
-          <p>Designed and built in-house · Saurav Arora & Raman Kumar</p>
+          <div className="flex items-center gap-4">
+            <p>Designed and built in-house · Saurav Arora & Raman Kumar</p>
+            <Link to="/auth" className="opacity-60 hover:opacity-100 hover:underline">Studio admin</Link>
+          </div>
         </div>
       </div>
     </footer>

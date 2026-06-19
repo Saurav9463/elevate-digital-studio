@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { z } from "zod";
 import { Mail, MessageCircle, MapPin, Linkedin, Github, Send, CheckCircle2 } from "lucide-react";
 import { PageShell, PageHeader } from "@/components/site/PageShell";
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { siteConfig, services } from "@/data/site";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/contact")({
@@ -30,6 +32,15 @@ export const Route = createFileRoute("/contact")({
   component: ContactPage,
 });
 
+const leadSchema = z.object({
+  name: z.string().trim().min(1, "Required").max(120),
+  email: z.string().trim().email("Enter a valid email").max(255),
+  company: z.string().trim().max(200).optional().or(z.literal("")),
+  phone: z.string().trim().max(40).optional().or(z.literal("")),
+  service: z.string().trim().max(80).optional().or(z.literal("")),
+  message: z.string().trim().min(1, "Required").max(5000),
+});
+
 function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -37,12 +48,35 @@ function ContactPage() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    // Phase 2: this will POST to a server function backed by Lovable Cloud.
-    await new Promise((r) => setTimeout(r, 700));
-    setLoading(false);
-    setSubmitted(true);
-    toast.success("Thanks — we'll be in touch within one working day.");
-    (e.target as HTMLFormElement).reset();
+    try {
+      const fd = new FormData(e.currentTarget);
+      const parsed = leadSchema.parse({
+        name: fd.get("name"),
+        email: fd.get("email"),
+        company: fd.get("company") ?? "",
+        phone: fd.get("phone") ?? "",
+        service: fd.get("service") ?? "",
+        message: fd.get("message"),
+      });
+      const { error } = await supabase.from("leads").insert({
+        name: parsed.name,
+        email: parsed.email,
+        company: parsed.company || null,
+        phone: parsed.phone || null,
+        service: parsed.service || null,
+        message: parsed.message,
+        source: "website",
+      });
+      if (error) throw error;
+      setSubmitted(true);
+      toast.success("Thanks — we'll be in touch within one working day.");
+      (e.target as HTMLFormElement).reset();
+    } catch (err: any) {
+      const msg = err?.issues?.[0]?.message ?? err?.message ?? "Could not send message";
+      toast.error(msg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
