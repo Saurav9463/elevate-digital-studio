@@ -1,29 +1,24 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { PageHeader, PageShell } from "@/components/site/PageShell";
 import { ProjectCard } from "@/components/site/ProjectCard";
-import { projects } from "@/data/site";
+import { fetchPublishedProjects } from "@/lib/cms";
 
 export const Route = createFileRoute("/projects")({
   head: () => ({
     meta: [
       { title: "Our Work — Elevate Web Solutions" },
-      {
-        name: "description",
-        content:
-          "Selected projects by Elevate Web Solutions — websites, booking systems, and dashboards built for real businesses.",
-      },
+      { name: "description", content: "Selected projects — websites, booking systems, and dashboards built for real businesses." },
       { property: "og:title", content: "Our Work — Elevate Web Solutions" },
-      {
-        property: "og:description",
-        content: "Selected projects — websites, booking systems, and dashboards.",
-      },
+      { property: "og:description", content: "Selected projects — websites, booking systems, and dashboards." },
     ],
   }),
   component: ProjectsPage,
 });
 
 function ProjectsPage() {
+  const { data: projects = [] } = useQuery({ queryKey: ["public", "projects"], queryFn: fetchPublishedProjects });
   const categories = ["All", ...Array.from(new Set(projects.map((p) => p.category)))];
   const [active, setActive] = useState<string>("All");
   const filtered = active === "All" ? projects : projects.filter((p) => p.category === active);
@@ -35,7 +30,6 @@ function ProjectsPage() {
         title="A selection of recent projects."
         description="Every project below was designed and built end-to-end by our two-person team."
       />
-
       <section className="section pt-12">
         <div className="container-page">
           <div className="mb-10 flex flex-wrap gap-2">
@@ -53,12 +47,16 @@ function ProjectsPage() {
               </button>
             ))}
           </div>
-
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filtered.map((p, i) => (
-              <ProjectCard key={p.slug} project={p} index={i} />
+              <ProjectCard key={p.id} project={p} index={i} />
             ))}
           </div>
+          {!filtered.length && (
+            <div className="rounded-lg border border-dashed border-border p-16 text-center text-sm text-muted-foreground">
+              No projects to show yet.
+            </div>
+          )}
         </div>
       </section>
     </PageShell>
