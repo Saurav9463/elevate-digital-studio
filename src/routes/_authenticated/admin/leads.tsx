@@ -186,6 +186,7 @@ function LeadsPage() {
               <div>
                 <h3 className="text-sm font-semibold">Internal notes</h3>
                 <Textarea
+                  key={selected.id}
                   defaultValue={selected.notes ?? ""}
                   rows={4}
                   className="mt-2"

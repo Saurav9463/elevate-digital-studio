@@ -29,9 +29,21 @@ function SettingsAdmin() {
 
   useEffect(() => {
     if (!data) return;
-    setHero({ eyebrow: "", title: "", description: "", ...(data.hero ?? {}) });
-    setContact({ email: "", whatsapp: "", whatsapp_url: "", location: "", ...(data.contact ?? {}) });
-    setSocial({ linkedin: "", github: "", ...(data.social ?? {}) });
+    setHero({
+      eyebrow: data.hero?.eyebrow ?? "",
+      title: data.hero?.title ?? "",
+      description: data.hero?.description ?? data.hero?.subtitle ?? "",
+    });
+    setContact({
+      email: data.contact?.email ?? "",
+      whatsapp: data.contact?.whatsapp ?? "",
+      whatsapp_url: data.contact?.whatsapp_url ?? "",
+      location: data.contact?.location ?? "",
+    });
+    setSocial({
+      linkedin: data.social?.linkedin ?? "",
+      github: data.social?.github ?? "",
+    });
     setStats(Array.isArray(data.trust_stats) ? data.trust_stats : []);
   }, [data]);
 
