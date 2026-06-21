@@ -1,6 +1,3 @@
-import sauravAsset from "@/assets/founders/saurav.png.asset.json";
-import ramanAsset from "@/assets/founders/raman.jpg.asset.json";
-
 export const siteConfig = {
   name: "Elevate Web Solutions",
   shortName: "Elevate",
@@ -228,7 +225,7 @@ export const founders = [
     role: "Co-founder · Design & Frontend",
     bio:
       "Saurav leads design and frontend engineering at Elevate. He focuses on visual systems, motion, and turning business goals into interfaces that convert.",
-    photo: sauravAsset.url,
+    photo: "/founders/saurav.png",
     skills: ["React", "TypeScript", "Tailwind CSS", "Framer Motion", "UI/UX", "Design Systems"],
     links: {
       linkedin: "https://www.linkedin.com/in/saurav-arora",
@@ -240,7 +237,7 @@ export const founders = [
     role: "Co-founder · Backend & Systems",
     bio:
       "Raman leads backend engineering and infrastructure. He designs the APIs, databases, and integrations that keep client products fast and reliable.",
-    photo: ramanAsset.url,
+    photo: "/founders/raman.jpg",
     skills: ["Node.js", "Express", "Supabase", "PostgreSQL", "REST APIs", "Cloud Infra"],
     links: {
       linkedin: "https://www.linkedin.com/in/raman-kumar",
