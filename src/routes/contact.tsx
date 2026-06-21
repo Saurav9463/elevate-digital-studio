@@ -13,6 +13,7 @@ import { siteConfig, services } from "@/data/site";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
+
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
@@ -44,6 +45,7 @@ const leadSchema = z.object({
 function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedService, setSelectedService] = useState("");
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,7 +57,7 @@ function ContactPage() {
         email: fd.get("email"),
         company: fd.get("company") ?? "",
         phone: fd.get("phone") ?? "",
-        service: fd.get("service") ?? "",
+        service: selectedService || "",
         message: fd.get("message"),
       });
       const { error } = await supabase.from("leads").insert({
@@ -69,6 +71,7 @@ function ContactPage() {
       });
       if (error) throw error;
       setSubmitted(true);
+      setSelectedService("");
       toast.success("Thanks — we'll be in touch within one working day.");
       (e.target as HTMLFormElement).reset();
     } catch (err: any) {
@@ -131,7 +134,7 @@ function ContactPage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="service">What do you need?</Label>
-                  <Select name="service">
+                  <Select value={selectedService} onValueChange={setSelectedService}>
                     <SelectTrigger id="service">
                       <SelectValue placeholder="Choose a service" />
                     </SelectTrigger>
