@@ -49,13 +49,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   async function checkAdmin(userId: string) {
-    const { data } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", userId)
-      .eq("role", "admin")
-      .maybeSingle();
-    setIsAdmin(!!data);
+    try {
+      const { data, error } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId)
+        .eq("role", "admin")
+        .maybeSingle();
+      // 403 means RLS denied (non-admin user) — treat as not admin silently
+      if (error) {
+        setIsAdmin(false);
+        return;
+      }
+      setIsAdmin(!!data);
+    } catch {
+      setIsAdmin(false);
+    }
   }
 
   async function signOut() {
