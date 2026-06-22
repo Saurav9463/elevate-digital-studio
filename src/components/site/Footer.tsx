@@ -86,7 +86,6 @@ export function Footer() {
           <p>© {new Date().getFullYear()} {siteConfig.name}. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <p>Designed and built in-house · Saurav Arora & Raman Kumar</p>
-            <Link to="/auth" className="opacity-60 hover:opacity-100 hover:underline">Studio admin</Link>
           </div>
         </div>
       </div>

@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import { PageHeader, PageShell } from "@/components/site/PageShell";
 import { ProjectCard } from "@/components/site/ProjectCard";
-import { fetchPublishedProjects } from "@/lib/cms";
+import { projects } from "@/data/site";
 
 export const Route = createFileRoute("/projects")({
   head: () => ({
@@ -18,7 +17,6 @@ export const Route = createFileRoute("/projects")({
 });
 
 function ProjectsPage() {
-  const { data: projects = [] } = useQuery({ queryKey: ["public", "projects"], queryFn: fetchPublishedProjects });
   const categories = ["All", ...Array.from(new Set(projects.map((p) => p.category)))];
   const [active, setActive] = useState<string>("All");
   const filtered = active === "All" ? projects : projects.filter((p) => p.category === active);

@@ -1,9 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import { PageHeader, PageShell } from "@/components/site/PageShell";
 import { ServiceCard } from "@/components/site/ServiceCard";
-import { fetchPublishedServices } from "@/lib/cms";
-import { process } from "@/data/site";
+import { process, services } from "@/data/site";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
@@ -18,8 +16,6 @@ export const Route = createFileRoute("/services")({
 });
 
 function ServicesPage() {
-  const { data: services = [] } = useQuery({ queryKey: ["public", "services"], queryFn: fetchPublishedServices });
-
   return (
     <PageShell>
       <PageHeader
