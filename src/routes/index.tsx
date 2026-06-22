@@ -1,17 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { ArrowRight, Check, Sparkles, Star } from "lucide-react";
 import { PageShell } from "@/components/site/PageShell";
 import { ProjectCard } from "@/components/site/ProjectCard";
 import { ServiceCard } from "@/components/site/ServiceCard";
-import {
-  fetchPublishedProjects,
-  fetchPublishedServices,
-  fetchPublishedTestimonials,
-  fetchSiteSettings,
-} from "@/lib/cms";
-import { whyChooseUs } from "@/data/site";
+import { hero, projects, services, testimonials, trustStats, whyChooseUs } from "@/data/site";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -25,31 +18,18 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const HERO_FALLBACK = {
-  eyebrow: "A boutique web studio",
-  title: "We build websites that help local businesses grow.",
-  description: "Professional websites, booking systems, and business dashboards designed to help you attract more customers and run a calmer business.",
-};
-const STATS_FALLBACK = [
-  { value: "40+", label: "Projects delivered" },
-  { value: "98%", label: "Client satisfaction" },
-  { value: "2–4 wk", label: "Average delivery" },
-  { value: "24/7", label: "Ongoing support" },
-];
-
 function Home() {
-  const { data: settings } = useQuery({ queryKey: ["public", "settings"], queryFn: fetchSiteSettings });
-  const { data: services = [] } = useQuery({ queryKey: ["public", "services"], queryFn: fetchPublishedServices });
-  const { data: projects = [] } = useQuery({ queryKey: ["public", "projects"], queryFn: fetchPublishedProjects });
-  const { data: testimonials = [] } = useQuery({ queryKey: ["public", "testimonials"], queryFn: fetchPublishedTestimonials });
-
-  const hero = { ...HERO_FALLBACK, ...(settings?.hero ?? {}) };
-  const trustStats: Array<{ value: string; label: string }> = settings?.trust_stats ?? STATS_FALLBACK;
   const featured = projects.filter((p) => p.is_featured).slice(0, 3);
   const homeServices = services.slice(0, 6);
-  const headline = hero.title.includes("local businesses")
-    ? <>{hero.title.split("local businesses")[0]}<span className="text-accent">local businesses</span>{hero.title.split("local businesses")[1] ?? ""}</>
-    : hero.title;
+  const headline = hero.title.includes("local businesses") ? (
+    <>
+      {hero.title.split("local businesses")[0]}
+      <span className="text-accent">local businesses</span>
+      {hero.title.split("local businesses")[1] ?? ""}
+    </>
+  ) : (
+    hero.title
+  );
 
   return (
     <PageShell>
@@ -175,12 +155,8 @@ function Home() {
                 <Link to="/contact" className="inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-medium text-accent-foreground transition-all hover:brightness-110">
                   Book consultation <ArrowRight className="h-4 w-4" />
                 </Link>
-                <Link to="/projects" className="inline-flex items-center justify-center gap-2 rounded-lg border border-background/20 px-5 py-3 text-sm font-medium text-background hover:bg-background/10">
-                  See our work
-                </Link>
               </div>
             </div>
-            <div aria-hidden className="pointer-events-none absolute -right-32 -top-32 h-80 w-80 rounded-full bg-accent/30 blur-3xl" />
           </div>
         </div>
       </section>

@@ -1,9 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import { Star } from "lucide-react";
 import { motion } from "framer-motion";
 import { PageHeader, PageShell } from "@/components/site/PageShell";
-import { fetchPublishedTestimonials } from "@/lib/cms";
+import { testimonials } from "@/data/site";
 
 export const Route = createFileRoute("/testimonials")({
   head: () => ({
@@ -18,8 +17,6 @@ export const Route = createFileRoute("/testimonials")({
 });
 
 function TestimonialsPage() {
-  const { data: testimonials = [] } = useQuery({ queryKey: ["public", "testimonials"], queryFn: fetchPublishedTestimonials });
-
   return (
     <PageShell>
       <PageHeader
@@ -59,9 +56,6 @@ function TestimonialsPage() {
               </motion.figure>
             ))}
           </div>
-          {!testimonials.length && (
-            <div className="rounded-lg border border-dashed border-border p-16 text-center text-sm text-muted-foreground">No testimonials yet.</div>
-          )}
         </div>
       </section>
     </PageShell>
