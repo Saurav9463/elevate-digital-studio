@@ -33,7 +33,7 @@ export function ProjectCard({ project, index = 0 }: { project: ProjectCardData; 
       <Wrapper>
         <div className={`relative aspect-[16/10] w-full overflow-hidden bg-gradient-to-br ${project.gradient}`}>
           {project.cover_url && (
-            <img src={project.cover_url} alt={project.title} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <img src={project.cover_url} alt={project.title} loading="lazy" className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105" />
           )}
           <div className="absolute inset-0 flex items-end p-5">
             <div className="flex items-center gap-2">
