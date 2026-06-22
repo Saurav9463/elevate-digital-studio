@@ -115,7 +115,7 @@ export const projects: Project[] = [
     is_featured: true,
     year: "2025",
     live_url: "https://burger-corner-luxury--mk9365886.replit.app/",
-    cover_url: null,
+    cover_url: "/projects/burger-corner.png",
     gradient: "from-red-200 via-orange-100 to-amber-100",
   },
 ];
