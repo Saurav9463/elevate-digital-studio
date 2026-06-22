@@ -86,7 +86,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { name: "author", content: "Elevate Web Solutions" },
       { name: "theme-color", content: "#FAFAFA" },
-      { property: "og:title", content: "Elevate Web Solutions" },
+      { property: "og:title", content: "Elevate Web Solutions — Websites that help local businesses grow" },
       {
         property: "og:description",
         content:
@@ -94,6 +94,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Elevate Web Solutions — Websites that help local businesses grow" },
+      { name: "description", content: "Elevate Digital Studio showcases a modern web agency's services and portfolio, managed via an admin dashboard." },
+      { property: "og:description", content: "Elevate Digital Studio showcases a modern web agency's services and portfolio, managed via an admin dashboard." },
+      { name: "twitter:description", content: "Elevate Digital Studio showcases a modern web agency's services and portfolio, managed via an admin dashboard." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9ce64579-4061-4966-be08-e5a6cd26da0a/id-preview-9703f5e3--bf371291-3682-4f4d-afba-72df04d89e68.lovable.app-1782108757950.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9ce64579-4061-4966-be08-e5a6cd26da0a/id-preview-9703f5e3--bf371291-3682-4f4d-afba-72df04d89e68.lovable.app-1782108757950.png" },
     ],
     links: [
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
