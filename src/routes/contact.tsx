@@ -10,24 +10,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { siteConfig, services } from "@/data/site";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact — Elevate Web Solutions" },
-      {
-        name: "description",
-        content:
-          "Tell us about your business. We'll reply within one working day with next steps, timelines, and a transparent quote.",
-      },
+      { name: "description", content: "Tell us about your business. We'll reply within one working day with next steps, timelines, and a transparent quote." },
       { property: "og:title", content: "Contact — Elevate Web Solutions" },
-      {
-        property: "og:description",
-        content: "Start a project with Elevate. Free consultation, honest timelines, fixed-scope quotes.",
-      },
+      { property: "og:description", content: "Start a project with Elevate. Free consultation, honest timelines, fixed-scope quotes." },
     ],
   }),
   component: ContactPage,
@@ -50,8 +41,9 @@ function ContactPage() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    const form = e.currentTarget;
     try {
-      const fd = new FormData(e.currentTarget);
+      const fd = new FormData(form);
       const parsed = leadSchema.parse({
         name: fd.get("name"),
         email: fd.get("email"),
@@ -60,20 +52,30 @@ function ContactPage() {
         service: selectedService || "",
         message: fd.get("message"),
       });
-      const { error } = await supabase.from("leads").insert({
-        name: parsed.name,
-        email: parsed.email,
-        company: parsed.company || null,
-        phone: parsed.phone || null,
-        service: parsed.service || null,
-        message: parsed.message,
-        source: "website",
+
+      const res = await fetch(siteConfig.formspreeEndpoint, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: new URLSearchParams({
+          name: parsed.name,
+          email: parsed.email,
+          company: parsed.company || "",
+          phone: parsed.phone || "",
+          service: parsed.service || "",
+          message: parsed.message,
+          _subject: `New enquiry from ${parsed.name}`,
+        }),
       });
-      if (error) throw error;
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({} as any));
+        throw new Error(data?.errors?.[0]?.message ?? "Could not send message");
+      }
+
       setSubmitted(true);
       setSelectedService("");
       toast.success("Thanks — we'll be in touch within one working day.");
-      (e.target as HTMLFormElement).reset();
+      form.reset();
     } catch (err: any) {
       const msg = err?.issues?.[0]?.message ?? err?.message ?? "Could not send message";
       toast.error(msg);
@@ -92,7 +94,6 @@ function ContactPage() {
 
       <section className="container-page py-16 md:py-20">
         <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr]">
-          {/* Form */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -158,6 +159,8 @@ function ContactPage() {
                     placeholder="Tell us about your business, goals, timeline, and budget range."
                   />
                 </div>
+                {/* Honeypot for basic spam protection */}
+                <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
                 <Button type="submit" size="lg" disabled={loading} className="w-full sm:w-auto">
                   {loading ? "Sending..." : (
                     <>
@@ -172,18 +175,13 @@ function ContactPage() {
             )}
           </motion.div>
 
-          {/* Side */}
           <div className="space-y-6">
             <div className="card-surface rounded-2xl p-6">
-              <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-                Reach us directly
-              </h3>
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Reach us directly</h3>
               <ul className="mt-4 space-y-4 text-sm">
                 <li className="flex items-start gap-3">
                   <Mail className="mt-0.5 size-4 text-primary" />
-                  <a href={`mailto:${siteConfig.email}`} className="text-foreground hover:underline">
-                    {siteConfig.email}
-                  </a>
+                  <a href={`mailto:${siteConfig.email}`} className="text-foreground hover:underline">{siteConfig.email}</a>
                 </li>
                 <li className="flex items-start gap-3">
                   <MessageCircle className="mt-0.5 size-4 text-primary" />
@@ -197,36 +195,21 @@ function ContactPage() {
                 </li>
               </ul>
               <div className="mt-6 flex gap-3">
-                <a
-                  href={siteConfig.linkedin}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex size-9 items-center justify-center rounded-md border border-border text-muted-foreground transition hover:border-primary hover:text-primary"
-                  aria-label="LinkedIn"
-                >
+                <a href={siteConfig.linkedin} target="_blank" rel="noreferrer" className="inline-flex size-9 items-center justify-center rounded-md border border-border text-muted-foreground transition hover:border-primary hover:text-primary" aria-label="LinkedIn">
                   <Linkedin className="size-4" />
                 </a>
-                <a
-                  href={siteConfig.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex size-9 items-center justify-center rounded-md border border-border text-muted-foreground transition hover:border-primary hover:text-primary"
-                  aria-label="GitHub"
-                >
+                <a href={siteConfig.github} target="_blank" rel="noreferrer" className="inline-flex size-9 items-center justify-center rounded-md border border-border text-muted-foreground transition hover:border-primary hover:text-primary" aria-label="GitHub">
                   <Github className="size-4" />
                 </a>
               </div>
             </div>
 
             <div className="card-surface rounded-2xl p-6">
-              <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-                What happens next
-              </h3>
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">What happens next</h3>
               <ol className="mt-4 space-y-3 text-sm text-muted-foreground">
                 <li><span className="font-medium text-foreground">1.</span> We reply within one working day.</li>
                 <li><span className="font-medium text-foreground">2.</span> Free 30-minute discovery call.</li>
-                <li><span className="font-medium text-foreground">3.</span> Fixed-scope proposal & timeline.</li>
-                <li><span className="font-medium text-foreground">4.</span> Kickoff — usually within a week.</li>
+                <li><span className="font-medium text-foreground">3.</span> Fixed-scope quote with a clear timeline.</li>
               </ol>
             </div>
           </div>

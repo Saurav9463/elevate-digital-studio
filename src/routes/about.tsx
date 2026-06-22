@@ -1,10 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Github, Linkedin } from "lucide-react";
 import { PageHeader, PageShell } from "@/components/site/PageShell";
-import { fetchPublishedFounders } from "@/lib/cms";
-import { process, technologies, whyChooseUs } from "@/data/site";
+import { founders, process, technologies, whyChooseUs } from "@/data/site";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -19,7 +17,6 @@ export const Route = createFileRoute("/about")({
 });
 
 function AboutPage() {
-  const { data: founders = [] } = useQuery({ queryKey: ["public", "founders"], queryFn: fetchPublishedFounders });
 
   return (
     <PageShell>
