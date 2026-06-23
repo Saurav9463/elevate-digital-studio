@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Github, Linkedin } from "lucide-react";
 import { PageHeader, PageShell } from "@/components/site/PageShell";
-import { founders, process, technologies, whyChooseUs } from "@/data/site";
+import { founders as staticFounders, process as staticProcess, technologies, whyChooseUs as staticWhyChooseUs } from "@/data/site";
+import { fetchFounders, fetchProcess, fetchWhyChooseUs } from "@/lib/queries";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -17,6 +19,9 @@ export const Route = createFileRoute("/about")({
 });
 
 function AboutPage() {
+  const { data: founders = staticFounders } = useQuery({ queryKey: ["founders"], queryFn: fetchFounders, staleTime: 1000 * 60 });
+  const { data: process = staticProcess } = useQuery({ queryKey: ["process_steps"], queryFn: fetchProcess, staleTime: 1000 * 60 });
+  const { data: whyChooseUs = staticWhyChooseUs } = useQuery({ queryKey: ["why_choose_us"], queryFn: fetchWhyChooseUs, staleTime: 1000 * 60 });
 
   return (
     <PageShell>
@@ -31,7 +36,7 @@ function AboutPage() {
           <span className="eyebrow">Founders</span>
           <h2 className="mt-4 text-3xl font-semibold tracking-tight md:text-4xl">Meet the team.</h2>
           <div className="mt-12 grid gap-8 md:grid-cols-2">
-            {founders.map((f, i) => (
+            {founders.map((f: any, i: number) => (
               <motion.article
                 key={f.id}
                 initial={{ opacity: 0, y: 16 }}
@@ -48,7 +53,7 @@ function AboutPage() {
                   <p className="mt-1 text-sm text-accent">{f.role}</p>
                   <p className="mt-4 text-sm text-muted-foreground">{f.bio}</p>
                   <div className="mt-5 flex flex-wrap gap-1.5">
-                    {f.skills.map((s) => (
+                    {(Array.isArray(f.skills) ? f.skills : []).map((s: string) => (
                       <span key={s} className="rounded-md border border-border bg-surface-muted px-2 py-0.5 text-[11px] text-muted-foreground">{s}</span>
                     ))}
                   </div>
@@ -89,7 +94,7 @@ function AboutPage() {
           <span className="eyebrow">Process</span>
           <h2 className="mt-4 max-w-xl text-3xl font-semibold tracking-tight md:text-4xl">How a project comes together.</h2>
           <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-            {process.map((p) => (
+            {process.map((p: any) => (
               <div key={p.step} className="card-surface p-6">
                 <div className="text-xs font-semibold tracking-widest text-accent">{p.step}</div>
                 <h3 className="mt-3 text-base font-semibold tracking-tight">{p.title}</h3>
@@ -105,7 +110,7 @@ function AboutPage() {
           <span className="eyebrow">Why Elevate</span>
           <h2 className="mt-4 max-w-xl text-3xl font-semibold tracking-tight md:text-4xl">What it's like to work with us.</h2>
           <div className="mt-12 grid gap-4 md:grid-cols-2">
-            {whyChooseUs.map((w) => (
+            {whyChooseUs.map((w: any) => (
               <div key={w.title} className="card-surface p-6">
                 <h3 className="text-base font-semibold tracking-tight">{w.title}</h3>
                 <p className="mt-1.5 text-sm text-muted-foreground">{w.text}</p>

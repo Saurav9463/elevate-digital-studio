@@ -1,10 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { ArrowRight, Check, Sparkles, Star } from "lucide-react";
 import { PageShell } from "@/components/site/PageShell";
 import { ProjectCard } from "@/components/site/ProjectCard";
 import { ServiceCard } from "@/components/site/ServiceCard";
-import { hero, projects, services, testimonials, trustStats, whyChooseUs } from "@/data/site";
+import { hero as staticHero, projects as staticProjects, services as staticServices, testimonials as staticTestimonials, trustStats as staticTrustStats, whyChooseUs as staticWhyChooseUs } from "@/data/site";
+import { fetchHero, fetchTrustStats, fetchServices, fetchProjects, fetchTestimonials, fetchWhyChooseUs } from "@/lib/queries";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -19,7 +21,14 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const featured = projects.filter((p) => p.is_featured).slice(0, 3);
+  const { data: hero = staticHero } = useQuery({ queryKey: ["hero"], queryFn: fetchHero, staleTime: 1000 * 60 });
+  const { data: trustStats = staticTrustStats } = useQuery({ queryKey: ["trust_stats"], queryFn: fetchTrustStats, staleTime: 1000 * 60 });
+  const { data: services = staticServices } = useQuery({ queryKey: ["services"], queryFn: fetchServices, staleTime: 1000 * 60 });
+  const { data: projects = staticProjects } = useQuery({ queryKey: ["projects"], queryFn: fetchProjects, staleTime: 1000 * 60 });
+  const { data: testimonials = staticTestimonials } = useQuery({ queryKey: ["testimonials"], queryFn: fetchTestimonials, staleTime: 1000 * 60 });
+  const { data: whyChooseUs = staticWhyChooseUs } = useQuery({ queryKey: ["why_choose_us"], queryFn: fetchWhyChooseUs, staleTime: 1000 * 60 });
+
+  const featured = projects.filter((p: any) => p.is_featured).slice(0, 3);
   const homeServices = services.slice(0, 6);
   const headline = hero.title.includes("local businesses") ? (
     <>
@@ -50,7 +59,7 @@ function Home() {
             <Link to="/contact" className="btn-outline">Get a free consultation</Link>
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className="mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-4">
-            {trustStats.map((s) => (
+            {trustStats.map((s: any) => (
               <div key={s.label} className="bg-surface p-6">
                 <div className="text-2xl font-semibold tracking-tight text-foreground md:text-3xl">{s.value}</div>
                 <div className="mt-1 text-xs text-muted-foreground">{s.label}</div>
@@ -70,8 +79,8 @@ function Home() {
             <Link to="/services" className="text-sm font-medium text-accent hover:underline">See all services →</Link>
           </div>
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {homeServices.map((s, i) => (
-              <ServiceCard key={s.id} title={s.title} summary={s.summary} bullets={s.bullets} icon={s.icon} index={i} />
+            {homeServices.map((s: any, i: number) => (
+              <ServiceCard key={s.id ?? s.slug} title={s.title} summary={s.summary} bullets={s.bullets} icon={s.icon} index={i} />
             ))}
           </div>
         </div>
@@ -88,7 +97,7 @@ function Home() {
               <Link to="/projects" className="text-sm font-medium text-accent hover:underline">View all projects →</Link>
             </div>
             <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {featured.map((p, i) => (
+              {featured.map((p: any, i: number) => (
                 <ProjectCard key={p.id} project={p} index={i} />
               ))}
             </div>
@@ -105,7 +114,7 @@ function Home() {
             <Link to="/about" className="mt-6 inline-flex text-sm font-medium text-accent hover:underline">Meet the founders →</Link>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
-            {whyChooseUs.map((w) => (
+            {whyChooseUs.map((w: any) => (
               <div key={w.title} className="card-surface p-5">
                 <div className="flex h-8 w-8 items-center justify-center rounded-md bg-foreground text-background">
                   <Check className="h-4 w-4" />
@@ -124,7 +133,7 @@ function Home() {
             <span className="eyebrow">Loved by owners</span>
             <h2 className="mt-4 max-w-2xl text-3xl font-semibold tracking-tight md:text-4xl">Real businesses. Real results.</h2>
             <div className="mt-12 grid gap-5 md:grid-cols-3">
-              {testimonials.slice(0, 3).map((t) => (
+              {testimonials.slice(0, 3).map((t: any) => (
                 <figure key={t.id} className="card-surface flex flex-col p-6">
                   <div className="flex gap-0.5 text-accent">
                     {Array.from({ length: t.rating }).map((_, i) => (

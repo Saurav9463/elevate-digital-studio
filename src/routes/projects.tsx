@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { PageHeader, PageShell } from "@/components/site/PageShell";
 import { ProjectCard } from "@/components/site/ProjectCard";
-import { projects } from "@/data/site";
+import { projects as staticProjects } from "@/data/site";
+import { fetchProjects } from "@/lib/queries";
 
 export const Route = createFileRoute("/projects")({
   head: () => ({
@@ -17,9 +19,10 @@ export const Route = createFileRoute("/projects")({
 });
 
 function ProjectsPage() {
-  const categories = ["All", ...Array.from(new Set(projects.map((p) => p.category)))];
+  const { data: projects = staticProjects } = useQuery({ queryKey: ["projects"], queryFn: fetchProjects, staleTime: 1000 * 60 });
+  const categories = ["All", ...Array.from(new Set(projects.map((p: any) => p.category)))];
   const [active, setActive] = useState<string>("All");
-  const filtered = active === "All" ? projects : projects.filter((p) => p.category === active);
+  const filtered = active === "All" ? projects : projects.filter((p: any) => p.category === active);
 
   return (
     <PageShell>
@@ -46,7 +49,7 @@ function ProjectsPage() {
             ))}
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((p, i) => (
+            {filtered.map((p: any, i: number) => (
               <ProjectCard key={p.id} project={p} index={i} />
             ))}
           </div>

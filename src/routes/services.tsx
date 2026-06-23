@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { PageHeader, PageShell } from "@/components/site/PageShell";
 import { ServiceCard } from "@/components/site/ServiceCard";
-import { process, services } from "@/data/site";
+import { process as staticProcess, services as staticServices } from "@/data/site";
+import { fetchServices, fetchProcess } from "@/lib/queries";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
@@ -16,6 +18,9 @@ export const Route = createFileRoute("/services")({
 });
 
 function ServicesPage() {
+  const { data: services = staticServices } = useQuery({ queryKey: ["services"], queryFn: fetchServices, staleTime: 1000 * 60 });
+  const { data: process = staticProcess } = useQuery({ queryKey: ["process_steps"], queryFn: fetchProcess, staleTime: 1000 * 60 });
+
   return (
     <PageShell>
       <PageHeader
@@ -25,8 +30,8 @@ function ServicesPage() {
       />
       <section className="section">
         <div className="container-page grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((s, i) => (
-            <ServiceCard key={s.id} title={s.title} summary={s.summary} bullets={s.bullets} icon={s.icon} index={i} />
+          {services.map((s: any, i: number) => (
+            <ServiceCard key={s.id ?? s.slug} title={s.title} summary={s.summary} bullets={s.bullets} icon={s.icon} index={i} />
           ))}
         </div>
       </section>
@@ -36,7 +41,7 @@ function ServicesPage() {
           <span className="eyebrow">How we work</span>
           <h2 className="mt-4 max-w-xl text-3xl font-semibold tracking-tight md:text-4xl">A calm, predictable process.</h2>
           <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-            {process.map((p) => (
+            {process.map((p: any) => (
               <div key={p.step} className="card-surface p-6">
                 <div className="text-xs font-semibold tracking-widest text-accent">{p.step}</div>
                 <h3 className="mt-3 text-base font-semibold tracking-tight">{p.title}</h3>

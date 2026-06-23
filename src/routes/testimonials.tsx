@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { Star } from "lucide-react";
 import { motion } from "framer-motion";
 import { PageHeader, PageShell } from "@/components/site/PageShell";
-import { testimonials } from "@/data/site";
+import { testimonials as staticTestimonials } from "@/data/site";
+import { fetchTestimonials } from "@/lib/queries";
 
 export const Route = createFileRoute("/testimonials")({
   head: () => ({
@@ -17,6 +19,8 @@ export const Route = createFileRoute("/testimonials")({
 });
 
 function TestimonialsPage() {
+  const { data: testimonials = staticTestimonials } = useQuery({ queryKey: ["testimonials"], queryFn: fetchTestimonials, staleTime: 1000 * 60 });
+
   return (
     <PageShell>
       <PageHeader
@@ -27,7 +31,7 @@ function TestimonialsPage() {
       <section className="section pt-12">
         <div className="container-page">
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {testimonials.map((t, i) => (
+            {testimonials.map((t: any, i: number) => (
               <motion.figure
                 key={t.id}
                 initial={{ opacity: 0, y: 14 }}
