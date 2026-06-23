@@ -7,13 +7,7 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const supabaseUrl = process.env.VITE_SUPABASE_URL!;
 const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY!;
 
-// Comma-separated list of admin emails configured server-side (never exposed to client)
-const ADMIN_EMAILS = (process.env.ADMIN_EMAIL ?? "")
-  .split(",")
-  .map((e) => e.trim().toLowerCase())
-  .filter(Boolean);
-
-async function verifyAdmin(request: Request): Promise<{ ok: true; email: string } | { ok: false; response: Response }> {
+async function verifyAuth(request: Request): Promise<{ ok: true } | { ok: false; response: Response }> {
   const authHeader = request.headers.get("authorization");
   const token = authHeader?.replace("Bearer ", "").trim();
 
@@ -31,7 +25,7 @@ async function verifyAdmin(request: Request): Promise<{ ok: true; email: string 
     const supabase = createClient(supabaseUrl, supabaseAnonKey);
     const { data: { user }, error } = await supabase.auth.getUser(token);
 
-    if (error || !user?.email) {
+    if (error || !user) {
       return {
         ok: false,
         response: new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -41,18 +35,7 @@ async function verifyAdmin(request: Request): Promise<{ ok: true; email: string 
       };
     }
 
-    // Enforce that the authenticated user's email is in the admin allow-list
-    if (ADMIN_EMAILS.length > 0 && !ADMIN_EMAILS.includes(user.email.toLowerCase())) {
-      return {
-        ok: false,
-        response: new Response(JSON.stringify({ error: "Forbidden" }), {
-          status: 403,
-          headers: { "content-type": "application/json" },
-        }),
-      };
-    }
-
-    return { ok: true, email: user.email };
+    return { ok: true };
   } catch {
     return {
       ok: false,
@@ -68,7 +51,7 @@ export const Route = createFileRoute("/api/admin/submissions")({
   server: {
     handlers: {
       GET: async ({ request }) => {
-        const auth = await verifyAdmin(request);
+        const auth = await verifyAuth(request);
         if (!auth.ok) return auth.response;
 
         const client = await pool.connect();
@@ -94,7 +77,7 @@ export const Route = createFileRoute("/api/admin/submissions")({
       },
 
       PATCH: async ({ request }) => {
-        const auth = await verifyAdmin(request);
+        const auth = await verifyAuth(request);
         if (!auth.ok) return auth.response;
 
         let body: { id: unknown; status: unknown };
