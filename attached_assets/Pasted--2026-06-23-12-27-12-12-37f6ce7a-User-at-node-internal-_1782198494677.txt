@@ -1,0 +1,161 @@
+
+2026-06-23 12:27:12.12
+37f6ce7a
+User
+at node:internal/main/run_main_module:36:49 {
+
+2026-06-23 12:27:12.12
+37f6ce7a
+User
+at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+
+2026-06-23 12:27:12.12
+37f6ce7a
+User
+}
+
+2026-06-23 12:27:12.12
+37f6ce7a
+User
+throw err;
+
+2026-06-23 12:27:12.12
+37f6ce7a
+User
+at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+
+2026-06-23 12:27:12.12
+37f6ce7a
+User
+at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+
+2026-06-23 12:27:12.12
+37f6ce7a
+User
+requireStack: []
+
+2026-06-23 12:27:12.12
+37f6ce7a
+User
+at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)
+
+2026-06-23 12:27:12.12
+37f6ce7a
+User
+^
+
+2026-06-23 12:27:12.12
+37f6ce7a
+User
+at Function._load (node:internal/modules/cjs/loader:1192:37)
+
+2026-06-23 12:27:12.12
+37f6ce7a
+User
+at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+
+2026-06-23 12:27:12.12
+37f6ce7a
+User
+at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1030:22)
+
+2026-06-23 12:27:13.83
+37f6ce7a
+System
+healthcheck failed error=healthcheck / returned status 500
+
+2026-06-23 12:27:14.00
+37f6ce7a
+System
+healthcheck failed error=healthcheck / returned status 500
+
+2026-06-23 12:27:15.56
+37f6ce7a
+System
+healthcheck failed error=healthcheck / returned status 500
+
+2026-06-23 12:27:15.81
+37f6ce7a
+System
+healthcheck failed error=healthcheck / returned status 500
+
+2026-06-23 12:27:16.41
+37f6ce7a
+System
+healthcheck failed error=healthcheck / returned status 500
+
+2026-06-23 12:27:17.74
+37f6ce7a
+System
+healthcheck failed error=healthcheck / returned status 500
+
+2026-06-23 12:27:18.51
+37f6ce7a
+System
+crash loop detected
+
+2026-06-23 12:27:19.11
+37f6ce7a
+System
+healthcheck failed error=healthcheck / returned status 500
+
+2026-06-23 12:27:20.53
+37f6ce7a
+System
+healthcheck failed error=healthcheck / returned status 500
+
+2026-06-23 12:27:20.71
+37f6ce7a
+System
+healthcheck failed error=healthcheck / returned status 500
+
+2026-06-23 12:33:22.13
+d436b45c
+System
+healthcheck failed error=healthcheck /: Get "http://127.0.0.1:1104/": dial tcp 127.0.0.1:1104: connect: connection refused
+
+2026-06-23 12:33:22.15
+d436b45c
+System
+healthcheck failed error=healthcheck / returned status 500
+
+2026-06-23 12:33:22.15
+d436b45c
+System
+healthcheck failed error=healthcheck / returned status 500
+
+2026-06-23 12:33:22.15
+d436b45c
+System
+healthcheck failed error=healthcheck / returned status 500
+
+2026-06-23 12:33:22.24
+d436b45c
+System
+healthcheck failed error=healthcheck / returned status 500
+
+2026-06-23 12:33:22.35
+d436b45c
+System
+healthcheck failed error=healthcheck / returned status 500
+
+2026-06-23 12:33:22.37
+d436b45c
+System
+healthcheck failed error=healthcheck / returned status 500
+
+2026-06-23 12:33:22.91
+d436b45c
+System
+healthcheck failed error=healthcheck / returned status 500
+
+2026-06-23 12:33:24.03
+d436b45c
+System
+healthcheck failed error=healthcheck /: Get "http://127.0.0.1:1104/": dial tcp 127.0.0.1:1104: connect: connection refused
+
+
+2026-06-23 12:33:27.94
+d436b45c
+System
+healthcheck failed error=healthcheck /: Get "http://127.0.0.1:1104/": dial tcp 127.0.0.1:1104: connect: connection refused

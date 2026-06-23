@@ -10,6 +10,10 @@ channel = "stable-25_05"
 localPort = 5000
 externalPort = 80
 
+[[ports]]
+localPort = 8080
+externalPort = 8080
+
 [workflows]
 runButton = "Project"
 
@@ -36,5 +40,5 @@ outputType = "webview"
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["node", "dist/server/server.js"]
+run = ["node", "server-node.mjs"]
 build = ["npm", "run", "build"]
