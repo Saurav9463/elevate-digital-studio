@@ -25,7 +25,8 @@ export function HeroSection() {
 
   async function save() {
     setSaving(true);
-    const { error } = await supabase.from("hero").upsert({ id: 1, ...data });
+    await supabase.from("hero").delete().neq("eyebrow", "");
+    const { error } = await supabase.from("hero").insert({ ...data });
     setSaving(false);
     if (error) toast.error("Failed to save: " + error.message);
     else toast.success("Hero section saved!");

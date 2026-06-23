@@ -8,10 +8,10 @@ import { toast } from "sonner";
 import { process as fallback } from "@/data/site";
 import { SectionLoader, SaveButton } from "./HeroSection";
 
-type Step = { id?: number; step: string; title: string; text: string };
+type Step = { id?: string; step: string; title: string; text: string };
 
 export function ProcessSection() {
-  const [steps, setSteps] = useState<Step[]>(fallback.map((s, i) => ({ ...s, id: i + 1 })));
+  const [steps, setSteps] = useState<Step[]>(fallback);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -28,8 +28,10 @@ export function ProcessSection() {
 
   async function save() {
     setSaving(true);
-    const rows = steps.map((s, i) => ({ id: i + 1, step: s.step, title: s.title, text: s.text }));
-    const { error } = await supabase.from("process_steps").upsert(rows);
+    const { error: delErr } = await supabase.from("process_steps").delete().neq("step", "");
+    if (delErr) { toast.error("Failed: " + delErr.message); setSaving(false); return; }
+    const rows = steps.map((s) => ({ step: s.step, title: s.title, text: s.text }));
+    const { error } = await supabase.from("process_steps").insert(rows);
     setSaving(false);
     if (error) toast.error("Failed: " + error.message);
     else toast.success("Process steps saved!");

@@ -44,7 +44,8 @@ export function SiteConfigSection() {
 
   async function save() {
     setSaving(true);
-    const { error } = await supabase.from("site_config").upsert({ id: 1, ...config });
+    await supabase.from("site_config").delete().neq("name", "");
+    const { error } = await supabase.from("site_config").insert({ ...config });
     setSaving(false);
     if (error) toast.error("Failed: " + error.message);
     else toast.success("Site config saved!");

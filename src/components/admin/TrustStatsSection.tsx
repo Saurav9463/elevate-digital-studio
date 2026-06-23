@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
 import { trustStats as fallback } from "@/data/site";
 import { SectionLoader, SaveButton } from "./HeroSection";
 
-type Stat = { id?: number; value: string; label: string };
+type Stat = { id?: string; value: string; label: string };
 
 export function TrustStatsSection() {
   const [stats, setStats] = useState<Stat[]>(fallback);
@@ -17,7 +15,7 @@ export function TrustStatsSection() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    supabase.from("trust_stats").select("*").order("id").then(({ data }) => {
+    supabase.from("trust_stats").select("*").order("label").then(({ data }) => {
       if (data && data.length > 0) setStats(data);
       setLoading(false);
     });
@@ -29,8 +27,10 @@ export function TrustStatsSection() {
 
   async function save() {
     setSaving(true);
-    const rows = stats.map((s, i) => ({ id: i + 1, value: s.value, label: s.label }));
-    const { error } = await supabase.from("trust_stats").upsert(rows);
+    const { error: delErr } = await supabase.from("trust_stats").delete().neq("value", "");
+    if (delErr) { toast.error("Failed: " + delErr.message); setSaving(false); return; }
+    const rows = stats.map((s) => ({ value: s.value, label: s.label }));
+    const { error } = await supabase.from("trust_stats").insert(rows);
     setSaving(false);
     if (error) toast.error("Failed to save: " + error.message);
     else toast.success("Trust stats saved!");

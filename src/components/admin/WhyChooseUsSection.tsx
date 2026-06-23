@@ -8,15 +8,15 @@ import { toast } from "sonner";
 import { whyChooseUs as fallback } from "@/data/site";
 import { SectionLoader, SaveButton } from "./HeroSection";
 
-type Item = { id?: number; title: string; text: string };
+type Item = { id?: string; title: string; text: string };
 
 export function WhyChooseUsSection() {
-  const [items, setItems] = useState<Item[]>(fallback.map((s, i) => ({ ...s, id: i + 1 })));
+  const [items, setItems] = useState<Item[]>(fallback);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    supabase.from("why_choose_us").select("*").order("id").then(({ data }) => {
+    supabase.from("why_choose_us").select("*").order("title").then(({ data }) => {
       if (data && data.length > 0) setItems(data);
       setLoading(false);
     });
@@ -28,8 +28,10 @@ export function WhyChooseUsSection() {
 
   async function save() {
     setSaving(true);
-    const rows = items.map((s, i) => ({ id: i + 1, title: s.title, text: s.text }));
-    const { error } = await supabase.from("why_choose_us").upsert(rows);
+    const { error: delErr } = await supabase.from("why_choose_us").delete().neq("title", "");
+    if (delErr) { toast.error("Failed: " + delErr.message); setSaving(false); return; }
+    const rows = items.map((s) => ({ title: s.title, text: s.text }));
+    const { error } = await supabase.from("why_choose_us").insert(rows);
     setSaving(false);
     if (error) toast.error("Failed: " + error.message);
     else toast.success("Saved!");
