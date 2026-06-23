@@ -53,23 +53,22 @@ function ContactPage() {
         message: fd.get("message"),
       });
 
-      const res = await fetch(siteConfig.formspreeEndpoint, {
+      const res = await fetch("/api/contact", {
         method: "POST",
-        headers: { Accept: "application/json" },
-        body: new URLSearchParams({
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
           name: parsed.name,
           email: parsed.email,
           company: parsed.company || "",
           phone: parsed.phone || "",
           service: parsed.service || "",
           message: parsed.message,
-          _subject: `New enquiry from ${parsed.name}`,
         }),
       });
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({} as any));
-        throw new Error(data?.errors?.[0]?.message ?? "Could not send message");
+        throw new Error(data?.error ?? "Could not send message");
       }
 
       setSubmitted(true);

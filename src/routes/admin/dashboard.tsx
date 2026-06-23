@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
-import { LogOut, LayoutDashboard, Sparkles, BarChart2, Briefcase, FolderKanban, Star, Users, Settings, ListOrdered, CheckCircle } from "lucide-react";
+import { LogOut, LayoutDashboard, Sparkles, BarChart2, Briefcase, FolderKanban, Star, Users, Settings, ListOrdered, CheckCircle, Inbox } from "lucide-react";
 import { HeroSection } from "@/components/admin/HeroSection";
 import { TrustStatsSection } from "@/components/admin/TrustStatsSection";
 import { ServicesSection } from "@/components/admin/ServicesSection";
@@ -12,12 +12,14 @@ import { FoundersSection } from "@/components/admin/FoundersSection";
 import { SiteConfigSection } from "@/components/admin/SiteConfigSection";
 import { ProcessSection } from "@/components/admin/ProcessSection";
 import { WhyChooseUsSection } from "@/components/admin/WhyChooseUsSection";
+import { LeadsSection } from "@/components/admin/LeadsSection";
 
 export const Route = createFileRoute("/admin/dashboard")({
   component: Dashboard,
 });
 
 const navItems = [
+  { id: "leads", label: "Leads", icon: Inbox },
   { id: "hero", label: "Hero", icon: Sparkles },
   { id: "trust-stats", label: "Trust Stats", icon: BarChart2 },
   { id: "services", label: "Services", icon: Briefcase },
@@ -31,7 +33,7 @@ const navItems = [
 
 function Dashboard() {
   const navigate = useNavigate();
-  const [activeSection, setActiveSection] = useState("hero");
+  const [activeSection, setActiveSection] = useState("leads");
   const [userEmail, setUserEmail] = useState("");
   const [checking, setChecking] = useState(true);
 
@@ -60,6 +62,7 @@ function Dashboard() {
   }
 
   const sectionComponents: Record<string, React.ReactNode> = {
+    "leads": <LeadsSection />,
     "hero": <HeroSection />,
     "trust-stats": <TrustStatsSection />,
     "services": <ServicesSection />,
