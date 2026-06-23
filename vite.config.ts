@@ -10,7 +10,7 @@ export default defineConfig({
     tailwindcss(),
     tanstackStart({
       server: {
-        preset: "node-server",
+        preset: "vercel",
       },
     }),
     react(),
