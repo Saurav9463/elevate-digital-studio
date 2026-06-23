@@ -36,5 +36,5 @@ outputType = "webview"
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["node", ".output/server/index.mjs"]
+run = ["node", "dist/server/server.js"]
 build = ["npm", "run", "build"]
