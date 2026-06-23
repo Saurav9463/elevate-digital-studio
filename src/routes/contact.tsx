@@ -53,23 +53,15 @@ function ContactPage() {
         message: fd.get("message"),
       });
 
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          name: parsed.name,
-          email: parsed.email,
-          company: parsed.company || "",
-          phone: parsed.phone || "",
-          service: parsed.service || "",
-          message: parsed.message,
-        }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({} as any));
-        throw new Error(data?.error ?? "Could not send message");
-      }
+     const { submitContactForm } = await import("@/routes/api/contact");
+await submitContactForm({
+  name: parsed.name,
+  email: parsed.email,
+  company: parsed.company || "",
+  phone: parsed.phone || "",
+  service: parsed.service || "",
+  message: parsed.message,
+});
 
       setSubmitted(true);
       setSelectedService("");
