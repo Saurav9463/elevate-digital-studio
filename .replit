@@ -46,3 +46,9 @@ outputType = "webview"
 deploymentTarget = "autoscale"
 run = ["node", "server-node.mjs"]
 build = ["npm", "run", "build"]
+
+[userenv]
+
+[userenv.shared]
+VITE_SUPABASE_URL = "https://tnwdcedqwujvjoajdqgz.supabase.co"
+VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRud2RjZWRxd3VqdmpvYWpkcWd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxOTQ0MjYsImV4cCI6MjA5Nzc3MDQyNn0.YE52FdGnQdHcrn_SGiRDRMxnXehSxTljyCIoLZ9LwHM"
