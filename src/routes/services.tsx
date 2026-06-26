@@ -31,7 +31,7 @@ function ServicesPage() {
       <section className="section">
         <div className="container-page grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((s: any, i: number) => (
-            <ServiceCard key={s.id ?? s.slug} title={s.title} summary={s.summary} bullets={s.bullets} icon={s.icon} index={i} />
+            <ServiceCard key={s.id ?? s.slug} title={s.title} summary={s.summary} bullets={s.bullets} icon={s.icon} slug={s.slug} index={i} />
           ))}
         </div>
       </section>
