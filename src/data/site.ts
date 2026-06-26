@@ -1,6 +1,6 @@
 export const siteConfig = {
-  name: "Elevate Web Solutions",
-  shortName: "Elevate",
+  name: "200Studio",
+  shortName: "200studio",
   tagline: "We build websites that help local businesses grow.",
   description:
     "Elevate Web Solutions is a boutique web studio building professional websites, booking systems, and business dashboards for restaurants, salons, clinics, gyms, and local businesses.",
