@@ -80,7 +80,7 @@ function Home() {
           </div>
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {homeServices.map((s: any, i: number) => (
-              <ServiceCard key={s.id ?? s.slug} title={s.title} summary={s.summary} bullets={s.bullets} icon={s.icon} index={i} />
+              <ServiceCard key={s.id ?? s.slug} title={s.title} summary={s.summary} bullets={s.bullets} icon={s.icon} slug={s.slug} index={i} />
             ))}
           </div>
         </div>
