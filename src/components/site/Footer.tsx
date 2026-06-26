@@ -1,9 +1,17 @@
 import { Link } from "@tanstack/react-router";
 import { Github, Linkedin, Mail, MessageCircle } from "lucide-react";
-import { navLinks, siteConfig } from "@/data/site";
+import { useQuery } from "@tanstack/react-query";
+import { navLinks, siteConfig as staticSiteConfig } from "@/data/site";
+import { fetchSiteConfig } from "@/lib/queries";
 import { Logo } from "./Logo";
 
 export function Footer() {
+  const { data: siteConfig = staticSiteConfig } = useQuery({
+    queryKey: ["site_config"],
+    queryFn: fetchSiteConfig,
+    staleTime: 1000 * 60,
+  });
+
   return (
     <footer className="border-t border-border bg-surface-muted/40">
       <div className="container-page py-16">
